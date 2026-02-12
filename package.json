@@ -1,0 +1,52 @@
+{
+  "name": "ay1",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "dependencies": {
+    "@sap-cloud-sdk/http-client": "^4.4.0",
+    "@sap-cloud-sdk/util": "^4.4.0",
+    "@sap/cds": "^9",
+    "@sap/low-code-event-handler": "^1.2.5",
+    "@sap/xsenv": ">=3.3.2 <3.3.3",
+    "@sap/xssec": "^4",
+    "express": "^4",
+    "passport": "^0.7.0",
+    "sqlite3": "^5.1.7",
+    "@cap-js/sqlite": "^2"
+  },
+  "devDependencies": {
+    "@sap/cds-dk": "^9",
+    "@sap/dev-cap-tools": "^1.31.0"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "start-local": "npm run generate-entry-point && npm run cds-watch",
+    "generate-entry-point": "dev-cap-tools gen-entrypoint",
+    "cds-watch": "cds watch --open"
+  },
+  "private": true,
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": ":memory:"
+        }
+      },
+      "auth": {
+        "[development]": {
+          "kind": "dummy"
+        },
+        "[production]": {
+          "kind": "xsuaa"
+        }
+      },
+      "[production]": {
+        "auth": {
+          "kind": "xsuaa"
+        }
+      }
+    }
+  },
+  "lcap": true
+}
