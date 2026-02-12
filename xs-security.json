@@ -1,0 +1,5 @@
+{
+  "xsappname": "bookshop-simple",
+  "tenant-mode": "dedicated",
+  "description": "Security for simple CAP demo"
+}
