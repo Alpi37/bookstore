@@ -1,4 +1,4 @@
-ID: bookshop-simple          # ← Dein Projekt-ID, unique!
+ID: bookshop-simple
 _schema-version: '3.1'
 version: 1.0.0
 
@@ -12,8 +12,31 @@ modules:
       buildpack: nodejs_buildpack
     provides:
       - name: srv-api
+        properties:
+          srv-url: ${default-url}
     requires:
       - name: bookshop-simple-uaa
+
+  - name: bookshop-simple-approuter
+    type: approuter.nodejs
+    path: app/router
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: bookshop-simple-uaa
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: ~{srv-url}
+          forwardAuthToken: true
+    provides:
+      - name: app-api
+        properties:
+          app-protocol: ${protocol}
+          app-uri: ${default-uri}
 
 resources:
   - name: bookshop-simple-uaa
@@ -22,3 +45,19 @@ resources:
       service: xsuaa
       service-plan: application
       config-path: ./xs-security.json
+      config:
+        xsappname: bookshop-simple-${org}-${space}
+        tenant-mode: dedicated
+        oauth2-configuration:
+          redirect-uris:
+            - https://*.cfapps.eu10.hana.ondemand.com/**  # Adjust to your region if needed
+
+parameters:
+  enable-parallel-deployments: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production

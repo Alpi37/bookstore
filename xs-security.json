@@ -1,5 +1,10 @@
 {
-  "xsappname": "bookshop-simple",
-  "tenant-mode": "dedicated",
-  "description": "Security for simple CAP demo"
+  "xsappname": "bookshop-simple-${org}-${space}",
+  "tenant-mode": "shared",   
+  "description": "Security for simple CAP demo",
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "https://*~{app-api/app-uri}/**"
+    ]
+  }
 }
