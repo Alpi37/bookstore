@@ -22,8 +22,8 @@ modules:
     path: app/router
     parameters:
       keep-existing-routes: true
-      disk-quota: 512M
-      memory: 512M
+      disk-quota: 2GB
+      memory: 1GB
     requires:
       - name: bookshop-simple-uaa
       - name: srv-api
